@@ -1,13 +1,12 @@
 import dotenv from 'dotenv';
 dotenv.config();
-import express, { Express, Request, Response }  from 'express';
+import express from 'express';
+import router from './routes/routes';
 const app = express();
 const PORT = process.env.PORT;
 
-app.get('/', (req: Request, res: Response) => {
-    res.send('Express + TypeScript Server')
-})
+app.use('/api/movies', router);
 
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+	console.log(`Server is running on http://localhost:${PORT}`);
 });
