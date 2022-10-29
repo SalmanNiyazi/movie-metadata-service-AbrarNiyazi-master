@@ -1,19 +1,17 @@
-import { Request, RequestHandler, Response } from 'express';
-import { dataMerger } from '../services/metaDataService';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { RequestHandler } from 'express';
 
-export const movieMetData: RequestHandler = (req: Request, res: Response) => {
+export const movieMetData: RequestHandler = async (req: any, res: any) => {
 	const id = req.params.id;
+	//const searcObject = req.query.seachObject;
+	//loop over the objects and match that object ,
+	// if matches send the response
+	//else a message that object doesnot exist
 	if (!id) {
-		return res.status(200).send({
-			stauts: 'SUCCESS',
-		});
+		//return entire file of merged data to user
 	}
 	if (id) {
-		const mergedData = dataMerger(id);
-		if (!mergedData) {
-			return res.status(200).send({
-				status: 'Nothing to show',
-			});
-		}
+		//loop over each object in file and return the object wehere id matches
 	}
 };
+
