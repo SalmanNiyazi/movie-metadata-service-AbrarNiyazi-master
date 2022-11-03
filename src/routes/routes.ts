@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { movieMetData } from '../controllers/movieMetadata';
+import { movieMetData } from '../services/metaDataService';
 const router = Router();
 
 router.get('/:id?', movieMetData);

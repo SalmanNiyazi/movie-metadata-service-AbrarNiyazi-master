@@ -6,41 +6,44 @@ import router from './routes/routes';
 const app = express();
 const PORT = process.env.PORT;
 import axios from 'axios';
+import { changeData, mergeMovie, writeMergedMovies } from '../utils/utils';
 
 app.use('/api/movies', router);
-
-async function getMetadata(PORT) {
-	const one =
-		'https://www.omdbapi.com/?i=tt0401792&apikey=68fd98ab&plot=full';
-	const two =
-		'https://www.omdbapi.com/?i=tt0097576&apikey=68fd98ab&plot=full';
-	const three =
-		'https://www.omdbapi.com/?i=tt0076759&apikey=68fd98ab&plot=full';
-	const four =
-		'https://www.omdbapi.com/?i=tt0061852&apikey=68fd98ab&plot=full';
+async function getMetadata(PORT: any) {
+	const one = `${process.env.BASE_URL}/?i=tt0401792&apikey=${process.env.API_KEY}&plot=full`;
+	const two = `${process.env.BASE_URL}/?i=tt0097576&apikey=${process.env.API_KEY}&plot=full`;
+	const three = `${process.env.BASE_URL}/?i=tt0076759&apikey=${process.env.API_KEY}&plot=full`;
+	const four = `${process.env.BASE_URL}/?i=tt0061852&apikey=${process.env.API_KEY}&plot=full`;
 
 	const requestOne = await axios.get(one);
-	console.log(requestOne);
 	const requestTwo = await axios.get(two);
 	const requestThree = await axios.get(three);
 	const requestFour = await axios.get(four);
 	axios
 		.all([requestOne, requestTwo, requestThree, requestFour])
 		.then(
-			axios.spread((...responses) => {
-				const responseOne = responses[0];
-				const responseTwo = responses[1];
-				const responseThree = responses[2];
-				const responseFour = responses[3];
-				console.log(
-					responseOne,
-					responseTwo,
-					responseThree,
-					responseFour
-				);
+			axios.spread((...responses: any) => {
+				const responseOne = responses[0].data;
+				const responseTwo = responses[1].data;
+				const responseThree = responses[2].data;
+				const responseFour = responses[3].data;
+
+				return [responseOne, responseTwo, responseThree, responseFour];
 			})
-		) // merge these four responses with four json objects from movies directory
-		//then write them to another file
+		)
+		.then(async (result) => {
+			const mergedData = await mergeMovie(result);
+			return mergedData;
+		})
+		.then(async (result) => {
+			const changedData = await changeData(result);
+			return changedData;
+		})
+		.then(async (result) => {
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const mergedMovies = await writeMergedMovies(result);
+			return false;
+		})
 		.catch((errors) => {
 			console.log(errors);
 		});

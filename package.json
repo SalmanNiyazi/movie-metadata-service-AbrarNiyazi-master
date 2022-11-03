@@ -4,8 +4,8 @@
 	"description": "Get merged data from two sources on a single endpoint",
 	"main": "index.ts",
 	"scripts": {
-		"build": "npx tsc",
-		"start": "node dist/src/index.js",
+		"build": "tsc",
+		"start": "tsc && node dist/src/index.js",
 		"dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
 		"lint": "eslint --ignore-path .eslintignore --ext .js,.ts .",
 		"format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\""
